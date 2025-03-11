@@ -1,93 +1,202 @@
-<div class="col-md-12">
-  <div class="card card-container">
-    <img
-      id="profile-img"
-      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-      class="profile-img-card"
-    />
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-4">
+            <img
+              id="profile-img"
+              src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+              class="rounded-circle mb-3"
+              width="80"
+              height="80"
+              alt="Profile image"
+            />
+            <h4 class="mb-0 fw-bold">Créer un compte</h4>
+            <p class="text-muted small">
+              Veuillez remplir les informations ci-dessous
+            </p>
+          </div>
 
-    <form
-      name="form"
-      (ngSubmit)="f.form.valid && onSubmit()"
-      #f="ngForm"
-      novalidate
-    >
-      <!-- Role selection -->
-      <div class="form-group">
-        <label for="role">Select Role</label>
-        <select
-          class="form-control"
-          name="role"
-          [(ngModel)]="form.role"
-          required
-          #role="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && role.errors }"
-        >
-          <!-- Show only Dentist and Patient roles -->
-          <option value="DENTIST">Dentist</option>
-          <option value="PATIENT">Patient</option>
-        </select>
-        <div *ngIf="role.errors && f.submitted" class="invalid-feedback">
-          <div>Role is required</div>
+          <form
+            name="form"
+            (ngSubmit)="f.form.valid && onSubmit()"
+            #f="ngForm"
+            novalidate
+            class="needs-validation"
+          >
+            <!-- Role selection -->
+            <div class="mb-3">
+              <label for="role" class="form-label">Type de compte</label>
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="bi bi-person-badge"></i
+                ></span>
+                <select
+                  class="form-select"
+                  name="role"
+                  [(ngModel)]="form.role"
+                  required
+                  #role="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && role.errors }"
+                >
+                  <option value="" disabled selected>
+                    Choisissez votre rôle
+                  </option>
+                  <option value="DENTIST">Dentiste</option>
+                  <option value="PATIENT">Patient</option>
+                </select>
+                <div
+                  *ngIf="role.errors && f.submitted"
+                  class="invalid-feedback"
+                >
+                  <div>Le choix d'un rôle est requis</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Email input -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="bi bi-envelope"></i
+                ></span>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  placeholder="Entrez votre adresse email"
+                  [(ngModel)]="form.email"
+                  required
+                  email
+                  #email="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && email.errors }"
+                />
+                <div
+                  *ngIf="email.errors && f.submitted"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="email.errors['required']">Email requis</div>
+                  <div *ngIf="email.errors['email']">
+                    L'adresse email doit être valide
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Password input -->
+            <div class="mb-4">
+              <label for="password" class="form-label">Mot de passe</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  placeholder="Créez un mot de passe sécurisé"
+                  [(ngModel)]="form.password"
+                  required
+                  minlength="6"
+                  #password="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && password.errors }"
+                />
+                <div
+                  *ngIf="password.errors && f.submitted"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="password.errors['required']">
+                    Mot de passe requis
+                  </div>
+                  <div *ngIf="password.errors['minlength']">
+                    Le mot de passe doit contenir au moins 6 caractères
+                  </div>
+                </div>
+              </div>
+              <div class="form-text mt-2">
+                <i class="bi bi-info-circle"></i> Le mot de passe doit contenir
+                au moins 6 caractères.
+              </div>
+            </div>
+
+            <!-- Terms and conditions checkbox -->
+            <div class="mb-4">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="terms"
+                  name="terms"
+                  required
+                  ngModel
+                  #terms="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && terms.invalid }"
+                />
+                <label class="form-check-label" for="terms">
+                  J'accepte les
+                  <a href="#" class="text-decoration-none"
+                    >termes et conditions</a
+                  >
+                </label>
+                <div
+                  *ngIf="terms.invalid && f.submitted"
+                  class="invalid-feedback"
+                >
+                  Vous devez accepter les termes et conditions
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit button -->
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" class="btn btn-primary py-2">
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                ></span>
+                S'inscrire
+              </button>
+            </div>
+
+            <!-- SignUp failed alert -->
+            <div
+              *ngIf="f.submitted && isSignUpFailed"
+              class="alert alert-warning alert-dismissible fade show"
+              role="alert"
+            >
+              <i class="bi bi-exclamation-triangle-fill me-2"></i>
+              L'inscription a échoué !<br />{{ errorMessage }}
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          </form>
+
+          <!-- Success message -->
+          <div *ngIf="isSuccessful" class="alert alert-success">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+              <div>
+                <p class="mb-0">
+                  Votre inscription a été effectuée avec succès !
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <!-- Email input -->
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          name="email"
-          [(ngModel)]="form.email"
-          required
-          email
-          #email="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && email.errors }"
-        />
-        <div *ngIf="email.errors && f.submitted" class="invalid-feedback">
-          <div *ngIf="email.errors['required']">Email is required</div>
-          <div *ngIf="email.errors['email']">
-            Email must be a valid email address
+        <div class="card-footer bg-white py-3 border-0">
+          <div class="text-center">
+            <p class="mb-0">
+              Vous avez déjà un compte ?
+              <a href="/login" class="text-decoration-none">Se connecter</a>
+            </p>
           </div>
         </div>
       </div>
-
-      <!-- Password input -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          name="password"
-          [(ngModel)]="form.password"
-          required
-          minlength="6"
-          #password="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && password.errors }"
-        />
-        <div *ngIf="password.errors && f.submitted" class="invalid-feedback">
-          <div *ngIf="password.errors['required']">Password is required</div>
-          <div *ngIf="password.errors['minlength']">
-            Password must be at least 6 characters
-          </div>
-        </div>
-      </div>
-
-      <!-- Submit button -->
-      <div class="form-group">
-        <button class="btn btn-primary btn-block">Sign Up</button>
-      </div>
-
-      <!-- SignUp failed alert -->
-      <div *ngIf="f.submitted && isSignUpFailed" class="alert alert-warning">
-        Signup failed!<br />{{ errorMessage }}
-      </div>
-    </form>
-
-    <!-- Success message -->
-    <div *ngIf="isSuccessful" class="alert alert-success">
-      Your registration is successful!
     </div>
   </div>
 </div>

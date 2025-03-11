@@ -1,84 +1,161 @@
-<div class="col-md-12">
-  <div class="card card-container">
-    <img
-      id="profile-img"
-      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-      class="profile-img-card"
-    />
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4 p-md-5">
+          <div class="text-center mb-4">
+            <img
+              id="profile-img"
+              src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+              class="rounded-circle mb-3"
+              width="80"
+              height="80"
+              alt="Profile image"
+            />
+            <h4 class="mb-0 fw-bold">Connexion</h4>
+            <p class="text-muted small">Veuillez saisir vos identifiants</p>
+          </div>
 
-    <!-- Formulaire de connexion si l'utilisateur n'est pas connecté -->
-    <form
-      *ngIf="!isLoggedIn"
-      name="form"
-      (ngSubmit)="onSubmit()"
-      #f="ngForm"
-      novalidate
-    >
-      <!-- Champ Username -->
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input
-          type="email"
-          class="form-control"
-          name="email"
-          [(ngModel)]="form.email"
-          required
-          #email="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && email.invalid }"
-        />
-        <div *ngIf="email.invalid && f.submitted" class="invalid-feedback">
-          Email is required!
-        </div>
-      </div>
+          <!-- Formulaire de connexion si l'utilisateur n'est pas connecté -->
+          <form
+            *ngIf="!isLoggedIn"
+            name="form"
+            (ngSubmit)="onSubmit()"
+            #f="ngForm"
+            novalidate
+            class="needs-validation"
+          >
+            <!-- Champ Email -->
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <div class="input-group">
+                <span class="input-group-text"
+                  ><i class="bi bi-envelope"></i
+                ></span>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  placeholder="Entrez votre email"
+                  [(ngModel)]="form.email"
+                  required
+                  #email="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && email.invalid }"
+                />
+                <div
+                  *ngIf="email.invalid && f.submitted"
+                  class="invalid-feedback"
+                >
+                  Email requis!
+                </div>
+              </div>
+            </div>
 
-      <!-- Champ Password -->
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          class="form-control"
-          name="password"
-          [(ngModel)]="form.password"
-          required
-          minlength="6"
-          #password="ngModel"
-          [ngClass]="{ 'is-invalid': f.submitted && password.invalid }"
-        />
-        <div *ngIf="password.invalid && f.submitted" class="invalid-feedback">
-          <div *ngIf="password.errors?.['required']">Password is required</div>
-          <div *ngIf="password.errors?.['minlength']">
-            Password must be at least 6 characters
+            <!-- Champ Password -->
+            <div class="mb-4">
+              <label for="password" class="form-label">Mot de passe</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                <input
+                  type="password"
+                  class="form-control"
+                  name="password"
+                  placeholder="Entrez votre mot de passe"
+                  [(ngModel)]="form.password"
+                  required
+                  minlength="6"
+                  #password="ngModel"
+                  [ngClass]="{ 'is-invalid': f.submitted && password.invalid }"
+                />
+                <div
+                  *ngIf="password.invalid && f.submitted"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="password.errors?.['required']">
+                    Mot de passe requis
+                  </div>
+                  <div *ngIf="password.errors?.['minlength']">
+                    Le mot de passe doit contenir au moins 6 caractères
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Option "Se souvenir de moi" et lien de récupération de mot de passe -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="remember-me"
+                />
+                <label class="form-check-label" for="remember-me">
+                  Se souvenir de moi
+                </label>
+              </div>
+              <a href="#" class="text-decoration-none small"
+                >Mot de passe oublié?</a
+              >
+            </div>
+
+            <!-- Bouton de connexion -->
+            <div class="d-grid gap-2 mb-3">
+              <button type="submit" class="btn btn-primary py-2">
+                <span
+                  *ngIf="loading"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                ></span>
+                Se connecter
+              </button>
+            </div>
+
+            <!-- Message d'erreur si l'authentification échoue -->
+            <div class="form-group">
+              <div
+                *ngIf="f.submitted && isLoginFailed"
+                class="alert alert-danger alert-dismissible fade show"
+                role="alert"
+              >
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ errorMessage }}
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                  aria-label="Close"
+                ></button>
+              </div>
+            </div>
+          </form>
+
+          <!-- Message de connexion réussie avec affichage du rôle -->
+          <div *ngIf="isLoggedIn" class="alert alert-success">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill me-2 fs-4"></i>
+              <div>
+                <p class="mb-1 fw-bold">
+                  Connecté en tant que {{ roles.join(", ") }}.
+                </p>
+                <!-- Affichage conditionnel en fonction du rôle -->
+                <div *ngIf="isDentist()">
+                  <p class="mb-0">Bienvenue, cher dentiste !</p>
+                </div>
+                <div *ngIf="isPatient()">
+                  <p class="mb-0">Bienvenue, cher patient !</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      <!-- Bouton de connexion -->
-      <div class="form-group">
-        <button class="btn btn-primary btn-block">Login</button>
-      </div>
-
-      <!-- Message d'erreur si l'authentification échoue -->
-      <div class="form-group">
-        <div
-          *ngIf="f.submitted && isLoginFailed"
-          class="alert alert-danger"
-          role="alert"
-        >
-          Login failed: {{ errorMessage }}
+        <div class="card-footer bg-white py-3 border-0">
+          <div class="text-center">
+            <p class="mb-0">
+              Vous n'avez pas de compte?
+              <a href="/register" class="text-decoration-none">S'inscrire</a>
+            </p>
+          </div>
         </div>
-      </div>
-    </form>
-
-    <!-- Message de connexion réussie avec affichage du rôle -->
-    <div *ngIf="isLoggedIn" class="alert alert-success">
-      Logged in as {{ roles.join(", ") }}.
-
-      <!-- Affichage conditionnel en fonction du rôle -->
-      <div *ngIf="isDentist()">
-        <p>Bienvenue, cher dentiste !</p>
-      </div>
-      <div *ngIf="isPatient()">
-        <p>Bienvenue, cher patient !</p>
       </div>
     </div>
   </div>

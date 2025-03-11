@@ -3,7 +3,7 @@ import { AuthService } from '../_services/auth.service';
 import { StorageService } from '../_services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
-import { Role } from '../models/enum.role'; // Importation de l'Enum
+import { Role } from '../models/enum.role';
 
 @Component({
   selector: 'app-login',
@@ -17,10 +17,11 @@ export class LoginComponent implements OnInit {
     email: null,
     password: null,
   };
+  loading: boolean = false;
   isLoggedIn = false;
   isLoginFailed = false;
   errorMessage = '';
-  roles: Role[] = []; // Utilisation de l'Enum Role
+  roles: Role[] = [];
 
   constructor(
     private authService: AuthService,
@@ -35,6 +36,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.loading = true;
     const { email, password } = this.form;
 
     this.authService.login(email, password).subscribe({
@@ -44,11 +46,13 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.mapRoles(this.storageService.getUser().roles);
+        this.loading = false;
         this.reloadPage();
       },
       error: (err) => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
+        this.loading = false;
       },
     });
   }
@@ -57,19 +61,16 @@ export class LoginComponent implements OnInit {
     window.location.reload();
   }
 
-  // 🔹 Mapper les rôles depuis le backend vers l'Enum Role
   private mapRoles(rolesFromBackend: string[]): Role[] {
     return rolesFromBackend
       .map((role) => role.toUpperCase() as Role)
       .filter((role) => Object.values(Role).includes(role));
   }
 
-  // 🔹 Vérifier si l'utilisateur est un Dentiste
   isDentist(): boolean {
     return this.roles.includes(Role.DENTIST);
   }
 
-  // 🔹 Vérifier si l'utilisateur est un Patient
   isPatient(): boolean {
     return this.roles.includes(Role.PATIENT);
   }

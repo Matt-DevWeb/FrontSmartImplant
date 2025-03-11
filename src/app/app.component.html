@@ -1,62 +1,89 @@
 <div id="app">
-  <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <a class="navbar-brand" routerLink="/home">SmartImplant</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <!-- Branding -->
+      <a class="navbar-brand" routerLink="/home">SmartImplant</a>
 
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="/home" routerLinkActive="active"
-          >Home</a
-        >
-      </li>
+      <!-- Toggler button for small screens -->
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-      <!-- Affichage conditionnel des boards selon les rôles -->
-      <li *ngIf="showAdminBoard" class="nav-item">
-        <a class="nav-link" routerLink="/admin" routerLinkActive="active"
-          >Admin Board</a
-        >
-      </li>
-      <li *ngIf="showDentistBoard" class="nav-item">
-        <a class="nav-link" routerLink="/dentist" routerLinkActive="active"
-          >Dentist Board</a
-        >
-      </li>
-      <li *ngIf="showPatientBoard" class="nav-item">
-        <a class="nav-link" routerLink="/patient" routerLinkActive="active"
-          >Patient Board</a
-        >
-      </li>
-    </ul>
+      <!-- Collapsible content -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <!-- Left-aligned links -->
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/home" routerLinkActive="active"
+              >Home</a
+            >
+          </li>
+          <li *ngIf="showAdminBoard" class="nav-item">
+            <a class="nav-link" routerLink="/admin" routerLinkActive="active"
+              >Admin Board</a
+            >
+          </li>
+          <li *ngIf="showDentistBoard" class="nav-item">
+            <a class="nav-link" routerLink="/dentist" routerLinkActive="active"
+              >Dentist Board</a
+            >
+          </li>
+          <li *ngIf="showPatientBoard" class="nav-item">
+            <a class="nav-link" routerLink="/patient" routerLinkActive="active"
+              >Patient Board</a
+            >
+          </li>
+        </ul>
 
-    <!-- Gestion des boutons Login / Logout -->
-    <ul class="navbar-nav ml-auto">
-      <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/register" routerLinkActive="active"
-            >Sign Up</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/login" routerLinkActive="active"
-            >Login</a
-          >
-        </li>
-      </ng-container>
+        <!-- Right-aligned links -->
+        <ul class="navbar-nav ms-auto">
+          <!-- If not logged in -->
+          <ng-container *ngIf="!isLoggedIn; else loggedInTemplate">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/register"
+                routerLinkActive="active"
+                >Sign Up</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" routerLink="/login" routerLinkActive="active"
+                >Login</a
+              >
+            </li>
+          </ng-container>
 
-      <!-- Template si l'utilisateur est connecté -->
-      <ng-template #loggedInTemplate>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/profile" routerLinkActive="active">{{
-            email
-          }}</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" (click)="logout()">LogOut</a>
-        </li>
-      </ng-template>
-    </ul>
+          <!-- If logged in -->
+          <ng-template #loggedInTemplate>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                routerLink="/profile"
+                routerLinkActive="active"
+              >
+                {{ email }}
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" (click)="logout()"> LogOut </a>
+            </li>
+          </ng-template>
+        </ul>
+      </div>
+    </div>
   </nav>
 
-  <div class="container">
+  <!-- Main content -->
+  <div class="container mt-4">
     <router-outlet></router-outlet>
   </div>
 </div>
