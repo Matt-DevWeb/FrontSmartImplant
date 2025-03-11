@@ -1,23 +1,27 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { FormsModule } from '@angular/forms';
-import { NgClass } from '@angular/common';
+import { NgClass, NgIf } from '@angular/common';
+import { Role } from '../models/enum.role';
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, NgClass],
+  imports: [FormsModule, NgClass, NgIf],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent {
   form: any = {
-    username: null,
     email: null,
     password: null,
+    role: Role.PATIENT, // Valeur par défaut à "PATIENT"
   };
   isSuccessful = false;
   isSignUpFailed = false;
   errorMessage = '';
+
+  // Exclure "ADMIN" du tableau des rôles pour le formulaire d'inscription
+  roles = Object.values(Role).filter((role) => role !== Role.ADMIN);
 
   constructor(private authService: AuthService) {}
 

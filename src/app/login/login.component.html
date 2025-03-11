@@ -1,1 +1,85 @@
-<p>login works!</p>
+<div class="col-md-12">
+  <div class="card card-container">
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
+    />
+
+    <!-- Formulaire de connexion si l'utilisateur n'est pas connecté -->
+    <form
+      *ngIf="!isLoggedIn"
+      name="form"
+      (ngSubmit)="onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <!-- Champ Username -->
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="form.email"
+          required
+          #email="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && email.invalid }"
+        />
+        <div *ngIf="email.invalid && f.submitted" class="invalid-feedback">
+          Email is required!
+        </div>
+      </div>
+
+      <!-- Champ Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="form.password"
+          required
+          minlength="6"
+          #password="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && password.invalid }"
+        />
+        <div *ngIf="password.invalid && f.submitted" class="invalid-feedback">
+          <div *ngIf="password.errors?.['required']">Password is required</div>
+          <div *ngIf="password.errors?.['minlength']">
+            Password must be at least 6 characters
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton de connexion -->
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">Login</button>
+      </div>
+
+      <!-- Message d'erreur si l'authentification échoue -->
+      <div class="form-group">
+        <div
+          *ngIf="f.submitted && isLoginFailed"
+          class="alert alert-danger"
+          role="alert"
+        >
+          Login failed: {{ errorMessage }}
+        </div>
+      </div>
+    </form>
+
+    <!-- Message de connexion réussie avec affichage du rôle -->
+    <div *ngIf="isLoggedIn" class="alert alert-success">
+      Logged in as {{ roles.join(", ") }}.
+
+      <!-- Affichage conditionnel en fonction du rôle -->
+      <div *ngIf="isDentist()">
+        <p>Bienvenue, cher dentiste !</p>
+      </div>
+      <div *ngIf="isPatient()">
+        <p>Bienvenue, cher patient !</p>
+      </div>
+    </div>
+  </div>
+</div>

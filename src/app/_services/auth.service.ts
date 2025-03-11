@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 const AUTH_API = 'http://localhost:8080/api/auth/';
 
@@ -24,5 +24,9 @@ export class AuthService {
       { email, password, role },
       httpOptions
     );
+  }
+
+  logout(): Observable<any> {
+    return this.http.post(AUTH_API + 'logout', {}, httpOptions);
   }
 }

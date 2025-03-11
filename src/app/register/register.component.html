@@ -5,13 +5,34 @@
       src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
       class="profile-img-card"
     />
-    @if (!isSuccessful) {
+
     <form
       name="form"
       (ngSubmit)="f.form.valid && onSubmit()"
       #f="ngForm"
       novalidate
     >
+      <!-- Role selection -->
+      <div class="form-group">
+        <label for="role">Select Role</label>
+        <select
+          class="form-control"
+          name="role"
+          [(ngModel)]="form.role"
+          required
+          #role="ngModel"
+          [ngClass]="{ 'is-invalid': f.submitted && role.errors }"
+        >
+          <!-- Show only Dentist and Patient roles -->
+          <option value="DENTIST">Dentist</option>
+          <option value="PATIENT">Patient</option>
+        </select>
+        <div *ngIf="role.errors && f.submitted" class="invalid-feedback">
+          <div>Role is required</div>
+        </div>
+      </div>
+
+      <!-- Email input -->
       <div class="form-group">
         <label for="email">Email</label>
         <input
@@ -24,16 +45,15 @@
           #email="ngModel"
           [ngClass]="{ 'is-invalid': f.submitted && email.errors }"
         />
-        @if (email.errors && f.submitted) {
-        <div class="invalid-feedback">
-          @if (email.errors['required']) {
-          <div>Email is required</div>
-          } @if (email.errors['email']) {
-          <div>Email must be a valid email address</div>
-          }
+        <div *ngIf="email.errors && f.submitted" class="invalid-feedback">
+          <div *ngIf="email.errors['required']">Email is required</div>
+          <div *ngIf="email.errors['email']">
+            Email must be a valid email address
+          </div>
         </div>
-        }
       </div>
+
+      <!-- Password input -->
       <div class="form-group">
         <label for="password">Password</label>
         <input
@@ -46,28 +66,28 @@
           #password="ngModel"
           [ngClass]="{ 'is-invalid': f.submitted && password.errors }"
         />
-        @if (password.errors && f.submitted) {
-        <div class="invalid-feedback">
-          @if (password.errors['required']) {
-          <div>Password is required</div>
-          } @if (password.errors['minlength']) {
-          <div>Password must be at least 6 characters</div>
-          }
+        <div *ngIf="password.errors && f.submitted" class="invalid-feedback">
+          <div *ngIf="password.errors['required']">Password is required</div>
+          <div *ngIf="password.errors['minlength']">
+            Password must be at least 6 characters
+          </div>
         </div>
-        }
       </div>
+
+      <!-- Submit button -->
       <div class="form-group">
         <button class="btn btn-primary btn-block">Sign Up</button>
       </div>
 
-      @if (f.submitted && isSignUpFailed) {
-      <div class="alert alert-warning">
+      <!-- SignUp failed alert -->
+      <div *ngIf="f.submitted && isSignUpFailed" class="alert alert-warning">
         Signup failed!<br />{{ errorMessage }}
       </div>
-      }
     </form>
-    } @else {
-    <div class="alert alert-success">Your registration is successful!</div>
-    }
+
+    <!-- Success message -->
+    <div *ngIf="isSuccessful" class="alert alert-success">
+      Your registration is successful!
+    </div>
   </div>
 </div>
