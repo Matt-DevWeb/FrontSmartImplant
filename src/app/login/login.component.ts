@@ -62,9 +62,17 @@ export class LoginComponent implements OnInit {
   }
 
   private mapRoles(rolesFromBackend: string[]): Role[] {
+    if (!Array.isArray(rolesFromBackend)) {
+      console.error('Les rôles reçus ne sont pas valides:', rolesFromBackend);
+      return [];
+    }
+
     return rolesFromBackend
-      .map((role) => role.toUpperCase() as Role)
-      .filter((role) => Object.values(Role).includes(role));
+      .map((role) => (role ? (role.toUpperCase() as Role) : null))
+      .filter(
+        (role): role is Role =>
+          role !== null && Object.values(Role).includes(role)
+      );
   }
 
   isDentist(): boolean {

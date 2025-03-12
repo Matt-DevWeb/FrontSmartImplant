@@ -31,6 +31,8 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     const { email, password, role } = this.form;
 
+    console.log('Sending request with data:', { email, password, role });
+
     this.authService.register(email, password, role).subscribe({
       next: (data) => {
         console.log(data);
@@ -39,7 +41,12 @@ export class RegisterComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.errorMessage = err.error.message;
+        console.error('Error response:', err);
+        console.error('Error details:', err.error); // Affiche le contenu de l'erreur
+        console.error('Status:', err.status);
+        console.error('Message:', err.message);
+        this.errorMessage =
+          err?.error?.message || err?.error || 'Unknown error';
         this.isSignUpFailed = true;
         this.loading = false;
       },

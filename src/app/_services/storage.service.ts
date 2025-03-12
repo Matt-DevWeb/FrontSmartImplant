@@ -25,6 +25,14 @@ export class StorageService {
 
     return {};
   }
+  public getUserRoles(): string[] {
+    const user = this.getUser();
+    if (user && user.roles && Array.isArray(user.roles)) {
+      return user.roles;
+    }
+
+    return []; // Retourne un tableau vide si aucun rôle n'est trouvé
+  }
 
   public isLoggedIn(): boolean {
     const user = window.sessionStorage.getItem(USER_KEY);
