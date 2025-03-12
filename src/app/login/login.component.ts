@@ -4,11 +4,12 @@ import { StorageService } from '../_services/storage.service';
 import { FormsModule } from '@angular/forms';
 import { NgClass, NgIf } from '@angular/common';
 import { Role } from '../models/enum.role';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, NgClass, NgIf],
+  imports: [FormsModule, NgClass, NgIf, RouterModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
@@ -25,13 +26,15 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     if (this.storageService.isLoggedIn()) {
       this.isLoggedIn = true;
-      this.roles = this.mapRoles(this.storageService.getUser().roles);
+      const storedRoles = this.storageService.getUser().roles;
+      this.roles = this.mapRoles(storedRoles);
     }
   }
 
@@ -42,12 +45,11 @@ export class LoginComponent implements OnInit {
     this.authService.login(email, password).subscribe({
       next: (data) => {
         this.storageService.saveUser(data);
-
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.mapRoles(this.storageService.getUser().roles);
         this.loading = false;
-        this.reloadPage();
+        this.redirectByRole();
       },
       error: (err) => {
         this.errorMessage = err.error.message;
@@ -57,8 +59,16 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  reloadPage(): void {
-    window.location.reload();
+  private redirectByRole(): void {
+    if (this.roles.includes(Role.DENTIST)) {
+      this.router.navigate(['/dentist']);
+    } else if (this.roles.includes(Role.PATIENT)) {
+      this.router.navigate(['/patient']);
+    } else if (this.roles.includes(Role.ADMIN)) {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
 
   private mapRoles(rolesFromBackend: string[]): Role[] {
@@ -75,6 +85,7 @@ export class LoginComponent implements OnInit {
       );
   }
 
+  // Pour l'affichage conditionnel dans le template
   isDentist(): boolean {
     return this.roles.includes(Role.DENTIST);
   }

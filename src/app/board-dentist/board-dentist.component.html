@@ -1,1 +1,88 @@
-<p>board-dentist works!</p>
+<div class="container my-4">
+  <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard Dentist</h2>
+  <div class="row">
+    <!-- Colonne gauche : Rendez-vous du jour et dossier des patients -->
+    <div class="col-md-8">
+      <!-- Carte Rendez-vous du jour -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="bi bi-calendar-check"></i> Rendez-vous du jour
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th><i class="bi bi-calendar3"></i> Date</th>
+                <th><i class="bi bi-clock"></i> Heure</th>
+                <th><i class="bi bi-person-fill"></i> Patient</th>
+                <th><i class="bi bi-check2-circle"></i> Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let appointment of todaysAppointments">
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.time }}</td>
+                <td>{{ appointment.patient }}</td>
+                <td>{{ appointment.status }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Carte Dossier des patients -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="bi bi-folder2-open"></i> Dossier des patients
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let patient of patients">
+              <i class="bi bi-person-circle"></i>
+              <strong>{{ patient.name }}</strong>
+              <br />
+              <small><i class="bi bi-envelope"></i> {{ patient.email }}</small>
+              <br />
+              <small><i class="bi bi-telephone"></i> {{ patient.phone }}</small>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Colonne droite : Statistiques et demandes de prise en charge -->
+    <div class="col-md-4">
+      <!-- Carte Statistiques -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="bi bi-bar-chart-line"></i> Statistiques
+        </div>
+        <div class="card-body">
+          <p>
+            <i class="bi bi-people-fill"></i> Nombre de patients :
+            <strong>{{ statistics.totalPatients }}</strong>
+          </p>
+          <p>
+            <i class="bi bi-clipboard2-check"></i> Opérations réalisées :
+            <strong>{{ statistics.totalOperations }}</strong>
+          </p>
+        </div>
+      </div>
+      <!-- Carte Demandes de prise en charge -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-card-checklist"></i> Demandes de prise en charge
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let request of careRequests">
+              <i class="bi bi-exclamation-circle"></i> {{ request }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+``` Assurez-vous d'avoir les Bootstrap Icons intégrés dans votre projet afin que
+les icônes s'affichent correctement (par exemple, via le CDN ou l'installation
+npm). Vous pourrez aussi enrichir et dynamiser ces données ultérieurement en les
+récupérant depuis une API.

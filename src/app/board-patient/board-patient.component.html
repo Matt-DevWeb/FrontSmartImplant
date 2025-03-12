@@ -1,1 +1,93 @@
-<p>board-patient works!</p>
+<div class="container my-4">
+  <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard Patient</h2>
+  <div class="row">
+    <!-- Colonne gauche : Informations personnelles et notifications -->
+    <div class="col-md-4">
+      <!-- Carte Mes Informations Personnelles -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="bi bi-person-circle"></i> Mes Informations Personnelles
+        </div>
+        <div class="card-body">
+          <p><strong>Nom :</strong> {{ patient.name }}</p>
+          <p><strong>Email :</strong> {{ patient.email }}</p>
+          <p><strong>Téléphone :</strong> {{ patient.phone }}</p>
+        </div>
+      </div>
+      <!-- Carte Notifications -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-bell-fill"></i> Notifications
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li
+              class="list-group-item"
+              *ngFor="let notification of notifications"
+            >
+              <i class="bi bi-info-circle"></i> {{ notification }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Colonne droite : Calendrier des rendez-vous, historique des soins et dépôt de documents -->
+    <div class="col-md-8">
+      <!-- Carte Calendrier des rendez-vous -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="bi bi-calendar-event"></i> Calendrier des rendez-vous
+        </div>
+        <div class="card-body">
+          <!-- Simuler un calendrier via un tableau dynamique -->
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th><i class="bi bi-calendar3"></i> Date</th>
+                <th><i class="bi bi-clock"></i> Heure</th>
+                <th><i class="bi bi-person-badge"></i> Médecin</th>
+                <th><i class="bi bi-check2-circle"></i> Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let appointment of appointments">
+                <td>{{ appointment.date }}</td>
+                <td>{{ appointment.time }}</td>
+                <td>{{ appointment.dentist }}</td>
+                <td>{{ appointment.status }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Carte Historique des soins -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <i class="bi bi-journal-text"></i> Historique des soins
+        </div>
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item" *ngFor="let record of medicalHistory">
+              <i class="bi bi-file-earmark-medical"></i>
+              <strong>{{ record.date }}</strong> - {{ record.description }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <!-- Carte Déposer des documents -->
+      <div class="card">
+        <div class="card-header">
+          <i class="bi bi-cloud-upload"></i> Déposer des documents
+        </div>
+        <div class="card-body">
+          <div class="border p-3 text-center" style="min-height: 150px">
+            <p>
+              <i class="bi bi-upload"></i> Glissez-déposez vos documents ici
+            </p>
+            <!-- Vous pouvez intégrer ici un composant de téléchargement dynamique -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

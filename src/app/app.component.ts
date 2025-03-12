@@ -30,28 +30,58 @@ export class AppComponent implements OnInit {
     this.isLoggedIn = this.storageService.isLoggedIn();
 
     if (this.isLoggedIn) {
-      const user = this.storageService.getUser();
-      this.roles = user.roles;
+      try {
+        const user = this.storageService.getUser();
+        console.log('User data:', user); // Pour déboguer la structure de l'objet utilisateur
 
-      // Vérification des rôles pour afficher les boards correspondants
-      this.showAdminBoard = this.roles.includes(Role.ADMIN);
-      this.showDentistBoard = this.roles.includes(Role.DENTIST);
-      this.showPatientBoard = this.roles.includes(Role.PATIENT);
+        // Initialisation des rôles par défaut (aucun)
+        this.roles = [];
 
-      this.email = user.email;
+        // Vérification que user existe et a une propriété roles
+        if (user) {
+          // Si les rôles existent sous forme de tableau
+          if (Array.isArray(user.roles)) {
+            this.roles = user.roles;
+          }
+          // Si les rôles existent sous une autre forme (peut-être un objet ou une chaîne)
+          else if (user.roles) {
+            console.log(
+              'Roles exist but not as array, type:',
+              typeof user.roles
+            );
+            // Tentative d'extraire ou convertir les rôles selon la structure reçue
+            if (typeof user.roles === 'string') {
+              this.roles = [user.roles]; // Conversion en tableau
+            }
+          }
+          // Si aucune propriété roles n'existe mais qu'il y a un rôle unique
+          else if (user.role) {
+            this.roles = [user.role];
+          }
+
+          // Définir l'email de l'utilisateur
+          this.email = user.email || '';
+        }
+
+        // Mise à jour des drapeaux d'affichage basés sur les rôles
+        this.showAdminBoard = this.roles.includes(Role.ADMIN);
+        this.showDentistBoard = this.roles.includes(Role.DENTIST);
+        this.showPatientBoard = this.roles.includes(Role.PATIENT);
+
+        console.log('Roles after processing:', this.roles);
+        console.log('Show boards:', {
+          admin: this.showAdminBoard,
+          dentist: this.showDentistBoard,
+          patient: this.showPatientBoard,
+        });
+      } catch (error) {
+        console.error('Error while processing user data:', error);
+      }
     }
   }
 
   logout(): void {
-    this.authService.logout().subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.storageService.clean();
-        window.location.reload();
-      },
-      error: (err: any) => {
-        console.log(err);
-      },
-    });
+    this.storageService.clean();
+    window.location.reload();
   }
 }
