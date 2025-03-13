@@ -1,5 +1,5 @@
 <div class="container my-4">
-  <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard Dentist</h2>
+  <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard Dentiste</h2>
   <div class="row">
     <!-- Colonne gauche : Rendez-vous du jour et dossier des patients -->
     <div class="col-md-8">
@@ -9,7 +9,7 @@
           <i class="bi bi-calendar-check"></i> Rendez-vous du jour
         </div>
         <div class="card-body">
-          <table class="table table-bordered">
+          <table class="table">
             <thead>
               <tr>
                 <th><i class="bi bi-calendar3"></i> Date</th>
@@ -23,7 +23,17 @@
                 <td>{{ appointment.date }}</td>
                 <td>{{ appointment.time }}</td>
                 <td>{{ appointment.patient }}</td>
-                <td>{{ appointment.status }}</td>
+                <td>
+                  <span
+                    [ngClass]="
+                      appointment.status === 'Confirmé'
+                        ? 'status-confirmed'
+                        : 'status-pending'
+                    "
+                  >
+                    {{ appointment.status }}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -57,13 +67,24 @@
         </div>
         <div class="card-body">
           <p>
-            <i class="bi bi-people-fill"></i> Nombre de patients :
-            <strong>{{ statistics.totalPatients }}</strong>
+            <i class="bi bi-people-fill"></i> Patients :
+            <span class="stat-badge">{{ statistics.totalPatients }}</span>
           </p>
           <p>
-            <i class="bi bi-clipboard2-check"></i> Opérations réalisées :
-            <strong>{{ statistics.totalOperations }}</strong>
+            <i class="bi bi-clipboard2-check"></i> Opérations :
+            <span class="stat-badge">{{ statistics.totalOperations }}</span>
           </p>
+          <button
+            class="btn w-100 mt-2"
+            style="
+              background-color: var(--accent-color);
+              border-color: var(--accent-color);
+              color: var(--text-color);
+              border-radius: 20px;
+            "
+          >
+            <i class="bi bi-graph-up"></i> Voir les statistiques détaillées
+          </button>
         </div>
       </div>
       <!-- Carte Demandes de prise en charge -->
@@ -82,7 +103,3 @@
     </div>
   </div>
 </div>
-``` Assurez-vous d'avoir les Bootstrap Icons intégrés dans votre projet afin que
-les icônes s'affichent correctement (par exemple, via le CDN ou l'installation
-npm). Vous pourrez aussi enrichir et dynamiser ces données ultérieurement en les
-récupérant depuis une API.

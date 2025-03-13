@@ -1,0 +1,164 @@
+/* Dashboard Dentist - Styles */
+
+/* Conteneur général */
+.container {
+  background-color: var(--light-bg);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* Titre avec accent */
+h2 {
+  color: var(--text-color);
+  position: relative;
+  margin-bottom: 25px;
+  font-weight: 600;
+  padding-bottom: 8px;
+}
+
+h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100px;
+  height: 3px;
+  background-color: var(--accent-color);
+}
+
+h2 .bi {
+  color: var(--accent-color);
+  margin-right: 8px;
+}
+
+/* Cards style */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  margin-bottom: 20px;
+  transition: transform 0.3s;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  border-bottom: none;
+  font-weight: 600;
+  color: var(--text-color);
+  padding: 12px 20px;
+}
+
+.card-header .bi {
+  color: var(--accent-color);
+  margin-right: 8px;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Tableaux et listes */
+.table {
+  margin-bottom: 0;
+}
+
+.table th {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  border-bottom: 0;
+  font-weight: 600;
+}
+
+.table th .bi {
+  color: var(--accent-color);
+  margin-right: 5px;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+/* Ajouter des lignes de tableau cliquables */
+.table tbody tr {
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.2);
+}
+
+/* Liste de groupe pour les patients */
+.list-group-item {
+  border: none;
+  margin-bottom: 8px;
+  border-radius: 8px !important;
+  transition: all 0.2s;
+  background-color: var(--neutral-color);
+}
+
+.list-group-item:last-child {
+  margin-bottom: 0;
+}
+
+.list-group-item:hover {
+  transform: translateX(5px);
+  background-color: var(--secondary-color);
+}
+
+.list-group-item .bi {
+  color: var(--accent-color);
+  margin-right: 8px;
+}
+
+/* Style pour les statistiques */
+.card-body p .bi {
+  color: var(--accent-color);
+  margin-right: 8px;
+}
+
+.card-body p strong {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+/* Badges statistiques */
+.stat-badge {
+  background-color: var(--accent-color);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin-left: 5px;
+}
+
+/* Demandes de prise en charge */
+.care-request {
+  background-color: rgba(173, 216, 230, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--accent-color);
+  transition: all 0.2s;
+}
+
+.care-request:hover {
+  background-color: rgba(173, 216, 230, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Statuts */
+.status-confirmed {
+  color: #28a745;
+  font-weight: 500;
+}
+
+.status-pending {
+  color: #ffc107;
+  font-weight: 500;
+}

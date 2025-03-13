@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs';
 import { StorageService } from './_services/storage.service';
 import { AuthService } from './_services/auth.service';
-import { Role } from './models/enum.role'; // N'oublie pas d'importer ton Enum
+import { Role } from './models/enum.role';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import { Role } from './models/enum.role'; // N'oublie pas d'importer ton Enum
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   private roles: Role[] = [];
   isLoggedIn = false;
   showAdminBoard = false;
@@ -21,49 +22,63 @@ export class AppComponent implements OnInit {
   email?: string;
   title = 'SmartImplant';
 
+  private authSubscription: Subscription | null = null;
+  private rolesSubscription: Subscription | null = null;
+
   constructor(
     private storageService: StorageService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
+    // Abonnement pour l'état de connexion
+    this.authSubscription = this.storageService.authStatus$.subscribe(
+      (isLoggedIn: boolean) => {
+        this.isLoggedIn = isLoggedIn;
+        if (isLoggedIn) {
+          const user = this.storageService.getUser();
+          this.email = user.email || user.sub;
+        } else {
+          this.showAdminBoard = false;
+          this.showDentistBoard = false;
+          this.showPatientBoard = false;
+          this.email = undefined;
+        }
+      }
+    );
+
+    // Abonnement pour les rôles
+    this.rolesSubscription = this.storageService.userRoles$.subscribe(
+      (roles: string[]) => {
+        console.log('Roles updated:', roles);
+        this.showAdminBoard = roles.includes(Role.ADMIN);
+        this.showDentistBoard = roles.includes(Role.DENTIST);
+        this.showPatientBoard = roles.includes(Role.PATIENT);
+      }
+    );
+
+    // Appel initial si besoin (en cas d'initialisation sans abonnement préalable)
     this.isLoggedIn = this.storageService.isLoggedIn();
 
     if (this.isLoggedIn) {
       try {
         const user = this.storageService.getUser();
-        console.log('User data:', user); // Pour déboguer la structure de l'objet utilisateur
+        console.log('User data:', user);
 
-        // Initialisation des rôles par défaut (aucun)
-        this.roles = [];
-
-        // Vérification que user existe et a une propriété roles
+        // Extraction et normalisation des rôles
         if (user) {
-          // Si les rôles existent sous forme de tableau
           if (Array.isArray(user.roles)) {
             this.roles = user.roles;
-          }
-          // Si les rôles existent sous une autre forme (peut-être un objet ou une chaîne)
-          else if (user.roles) {
-            console.log(
-              'Roles exist but not as array, type:',
-              typeof user.roles
-            );
-            // Tentative d'extraire ou convertir les rôles selon la structure reçue
+          } else if (user.roles) {
             if (typeof user.roles === 'string') {
-              this.roles = [user.roles]; // Conversion en tableau
+              this.roles = [user.roles];
             }
-          }
-          // Si aucune propriété roles n'existe mais qu'il y a un rôle unique
-          else if (user.role) {
+          } else if (user.role) {
             this.roles = [user.role];
           }
-
-          // Définir l'email de l'utilisateur
           this.email = user.email || '';
         }
 
-        // Mise à jour des drapeaux d'affichage basés sur les rôles
         this.showAdminBoard = this.roles.includes(Role.ADMIN);
         this.showDentistBoard = this.roles.includes(Role.DENTIST);
         this.showPatientBoard = this.roles.includes(Role.PATIENT);
@@ -80,8 +95,25 @@ export class AppComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
+    if (this.rolesSubscription) {
+      this.rolesSubscription.unsubscribe();
+    }
+  }
+
   logout(): void {
-    this.storageService.clean();
-    window.location.reload();
+    this.authService.logout().subscribe({
+      next: () => {
+        // La méthode signOut() dans StorageService est appelée directement dans AuthService.logout()
+        // Les observables mettront à jour la navbar.
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error('Logout error:', err);
+      },
+    });
   }
 }

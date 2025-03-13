@@ -1,9 +1,8 @@
 <div class="container my-4">
   <h2 class="mb-4"><i class="bi bi-speedometer2"></i> Dashboard Patient</h2>
   <div class="row">
-    <!-- Colonne gauche : Informations personnelles et notifications -->
+    <!-- Colonne gauche : Informations personnelles -->
     <div class="col-md-4">
-      <!-- Carte Mes Informations Personnelles -->
       <div class="card mb-4">
         <div class="card-header">
           <i class="bi bi-person-circle"></i> Mes Informations Personnelles
@@ -12,35 +11,30 @@
           <p><strong>Nom :</strong> {{ patient.name }}</p>
           <p><strong>Email :</strong> {{ patient.email }}</p>
           <p><strong>Téléphone :</strong> {{ patient.phone }}</p>
-        </div>
-      </div>
-      <!-- Carte Notifications -->
-      <div class="card">
-        <div class="card-header">
-          <i class="bi bi-bell-fill"></i> Notifications
-        </div>
-        <div class="card-body">
-          <ul class="list-group">
-            <li
-              class="list-group-item"
-              *ngFor="let notification of notifications"
-            >
-              <i class="bi bi-info-circle"></i> {{ notification }}
-            </li>
-          </ul>
+          <button
+            class="btn btn-primary mt-2"
+            style="
+              background-color: var(--accent-color);
+              border-color: var(--accent-color);
+              color: var(--text-color);
+              border-radius: 20px;
+            "
+          >
+            <i class="bi bi-pencil-fill"></i> Modifier
+          </button>
         </div>
       </div>
     </div>
-    <!-- Colonne droite : Calendrier des rendez-vous, historique des soins et dépôt de documents -->
+
+    <!-- Colonne droite : Rendez-vous, historique et dépôt de documents -->
     <div class="col-md-8">
-      <!-- Carte Calendrier des rendez-vous -->
+      <!-- Carte Rendez-vous à venir -->
       <div class="card mb-4">
         <div class="card-header">
-          <i class="bi bi-calendar-event"></i> Calendrier des rendez-vous
+          <i class="bi bi-calendar-event"></i> Rendez-vous à venir
         </div>
         <div class="card-body">
-          <!-- Simuler un calendrier via un tableau dynamique -->
-          <table class="table table-bordered">
+          <table class="table">
             <thead>
               <tr>
                 <th><i class="bi bi-calendar3"></i> Date</th>
@@ -54,12 +48,23 @@
                 <td>{{ appointment.date }}</td>
                 <td>{{ appointment.time }}</td>
                 <td>{{ appointment.dentist }}</td>
-                <td>{{ appointment.status }}</td>
+                <td>
+                  <span
+                    [ngClass]="
+                      appointment.status === 'Confirmé'
+                        ? 'status-confirmed'
+                        : 'status-pending'
+                    "
+                  >
+                    {{ appointment.status }}
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
       <!-- Carte Historique des soins -->
       <div class="card mb-4">
         <div class="card-header">
@@ -74,6 +79,7 @@
           </ul>
         </div>
       </div>
+
       <!-- Carte Déposer des documents -->
       <div class="card">
         <div class="card-header">
@@ -84,7 +90,7 @@
             <p>
               <i class="bi bi-upload"></i> Glissez-déposez vos documents ici
             </p>
-            <!-- Vous pouvez intégrer ici un composant de téléchargement dynamique -->
+            <!-- Intégration éventuelle d'un composant de téléchargement -->
           </div>
         </div>
       </div>

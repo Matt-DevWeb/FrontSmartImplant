@@ -134,9 +134,7 @@
             <div class="d-flex align-items-center">
               <i class="bi bi-check-circle-fill me-2 fs-4"></i>
               <div>
-                <p class="mb-1 fw-bold">
-                  Connecté en tant que {{ roles.join(", ") }}.
-                </p>
+                <p class="mb-1 fw-bold">Connecté</p>
                 <!-- Affichage conditionnel en fonction du rôle -->
                 <div *ngIf="isDentist()">
                   <p class="mb-0">Bienvenue, cher dentiste !</p>

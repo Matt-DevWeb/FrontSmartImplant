@@ -135,6 +135,8 @@ export class AuthService {
   }
 
   logout(): Observable<any> {
+    // Appel à signOut() pour effacer l'utilisateur et mettre à jour les observables
+    this.storageService.signOut();
     return of(true);
   }
 
