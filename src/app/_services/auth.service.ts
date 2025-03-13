@@ -36,6 +36,7 @@ export class AuthService {
           const token = response.accestoken;
           const decodedUser: JwtPayload | null = extractUserFromToken(token);
           console.log('User decoded from token:', decodedUser);
+          console.log('Token claims:', decodedUser);
 
           // Initialiser les rôles à partir du token décodé si disponible
           processedResponse.roles = [];
@@ -85,9 +86,8 @@ export class AuthService {
             ...response,
             roles: processedResponse.roles,
             email: decodedUser ? decodedUser.sub : null,
-            userId: decodedUser ? decodedUser.userId : null,
+            userId: decodedUser ? decodedUser.userId : null, // Doit être défini
           };
-
           this.storageService.saveUser(userToSave);
 
           return {

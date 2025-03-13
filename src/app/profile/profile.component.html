@@ -1,21 +1,202 @@
-@if (currentUser) {
-<div class="container">
+<div class="container" *ngIf="currentUser; else notLogged">
   <header class="jumbotron">
     <h3>
-      <strong>{{ currentUser.username }}</strong> Profile
+      <strong>{{ currentUser.firstName }} {{ currentUser.name }}</strong> -
+      Profil
     </h3>
   </header>
-  <p>
-    <strong>Email:</strong>
-    {{ currentUser.email }}
-  </p>
-  <strong>Roles:</strong>
-  <ul>
-    @for (role of currentUser.roles; track role) {
-    <li>{{ role }}</li>
-    }
-  </ul>
+
+  <form #profileForm="ngForm" (ngSubmit)="updateProfile()">
+    <!-- Informations de base -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>Informations personnelles</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="name" class="form-label">Nom :</label>
+            <input
+              type="text"
+              id="name"
+              class="form-control"
+              [(ngModel)]="currentUser.name"
+              name="name"
+            />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="firstName" class="form-label">Prénom :</label>
+            <input
+              type="text"
+              id="firstName"
+              class="form-control"
+              [(ngModel)]="currentUser.firstName"
+              name="firstName"
+            />
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email :</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            [(ngModel)]="currentUser.email"
+            name="email"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="age" class="form-label">Âge :</label>
+          <input
+            type="number"
+            id="age"
+            class="form-control"
+            [(ngModel)]="currentUser.age"
+            name="age"
+          />
+        </div>
+
+        <div class="mb-3">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            (click)="togglePasswordFields()"
+          >
+            {{
+              showPasswordFields
+                ? "Annuler le changement de mot de passe"
+                : "Modifier le mot de passe"
+            }}
+          </button>
+        </div>
+
+        <div *ngIf="showPasswordFields" class="row">
+          <div class="col-md-6 mb-3">
+            <label for="password" class="form-label"
+              >Nouveau mot de passe :</label
+            >
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              [(ngModel)]="password"
+              name="password"
+            />
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="confirmPassword" class="form-label"
+              >Confirmer le mot de passe :</label
+            >
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-control"
+              [(ngModel)]="confirmPassword"
+              name="confirmPassword"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informations de santé -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h4>Informations de santé</h4>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="socialSecurityNumber" class="form-label"
+            >Numéro de sécurité sociale :</label
+          >
+          <input
+            type="text"
+            id="socialSecurityNumber"
+            class="form-control"
+            [(ngModel)]="currentUser.socialSecurityNumber"
+            name="socialSecurityNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="mutualMembershipNumber" class="form-label"
+            >Numéro de mutuelle :</label
+          >
+          <input
+            type="text"
+            id="mutualMembershipNumber"
+            class="form-control"
+            [(ngModel)]="currentUser.mutualMembershipNumber"
+            name="mutualMembershipNumber"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="healthIssues" class="form-label"
+            >Problèmes de santé :</label
+          >
+          <textarea
+            id="healthIssues"
+            class="form-control"
+            rows="3"
+            [(ngModel)]="currentUser.healthIssues"
+            name="healthIssues"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="allergies" class="form-label">Allergies :</label>
+          <textarea
+            id="allergies"
+            class="form-control"
+            rows="2"
+            [(ngModel)]="currentUser.allergies"
+            name="allergies"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="currentMedications" class="form-label"
+            >Médicaments actuels :</label
+          >
+          <textarea
+            id="currentMedications"
+            class="form-control"
+            rows="2"
+            [(ngModel)]="currentUser.currentMedications"
+            name="currentMedications"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="chronicIllnesses" class="form-label"
+            >Maladies chroniques :</label
+          >
+          <textarea
+            id="chronicIllnesses"
+            class="form-control"
+            rows="2"
+            [(ngModel)]="currentUser.chronicIllnesses"
+            name="chronicIllnesses"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+      Mettre à jour le profil
+    </button>
+  </form>
 </div>
-} @else {
-<p>Please login.</p>
-}
+
+<ng-template #notLogged>
+  <div class="container">
+    <div class="alert alert-warning">
+      <p>Veuillez vous connecter pour accéder à votre profil.</p>
+    </div>
+  </div>
+</ng-template>
