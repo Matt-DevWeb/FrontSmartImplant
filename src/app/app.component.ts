@@ -116,4 +116,28 @@ export class AppComponent implements OnInit, OnDestroy {
       },
     });
   }
+
+  // Ajoutez cette méthode à votre classe AppComponent
+  getUserDisplayName(): string {
+    const user = this.storageService.getUser();
+    if (user) {
+      // Si nom et prénom sont disponibles, les afficher ensemble
+      if (user.firstName && user.name) {
+        return `${user.firstName} ${user.name}`;
+      }
+      // Si seul le prénom est disponible
+      else if (user.firstName) {
+        return user.firstName;
+      }
+      // Si seul le nom de famille est disponible
+      else if (user.name) {
+        return user.name;
+      }
+      // Si aucun nom n'est disponible, utiliser l'email (déjà stocké dans this.email)
+      else {
+        return this.email || 'Utilisateur';
+      }
+    }
+    return 'Profil';
+  }
 }

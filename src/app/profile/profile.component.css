@@ -1,0 +1,194 @@
+.bg-indigo {
+  background-color: #6610f2;
+}
+
+.bg-teal {
+  background-color: #20c997;
+}
+
+/* Versions plus douces des couleurs */
+.bg-soft-indigo {
+  background-color: #8540f5;
+}
+
+.bg-soft-teal {
+  background-color: #4dd4ac;
+}
+
+/* Utilise les variables globales du projet */
+.profile-title {
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: 0.5rem;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.profile-card {
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+  box-shadow: var(--card-shadow);
+  transform: translateY(-2px);
+}
+
+.profile-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 15px 20px;
+  border: none;
+}
+
+.profile-header-secondary {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 15px 20px;
+  border: none;
+}
+
+.profile-header-tertiary {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 15px 20px;
+  border: none;
+}
+
+.profile-label {
+  font-weight: 500;
+  color: var(--text-color);
+  margin-bottom: 6px;
+}
+
+.profile-input {
+  border: 1px solid var(--neutral-color);
+  border-radius: 6px;
+  padding: 10px 12px;
+  transition: all 0.2s ease-in-out;
+}
+
+.profile-input:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(59, 139, 189, 0.2);
+}
+
+.profile-input-icon {
+  background-color: var(--light-bg);
+  border: 1px solid var(--neutral-color);
+  border-right: none;
+  color: #6c757d;
+}
+
+.profile-btn-outline {
+  color: var(--primary-color);
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  border-radius: 20px; /* Utilise le même style arrondi que btn-custom-primary */
+  transition: all 0.3s;
+}
+
+.profile-btn-outline:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.profile-btn-primary {
+  background-color: var(--accent-color);
+  border: none;
+  color: white;
+  border-radius: 20px; /* Cohérent avec les autres boutons */
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.profile-btn-primary:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.profile-alert {
+  background-color: #fff3cd;
+  border: none;
+  border-radius: 8px;
+  color: #664d03;
+}
+
+.profile-divider {
+  border-top: 1px solid var(--neutral-color);
+}
+
+/* Animations douces */
+.card,
+.form-control,
+.btn {
+  transition: all 0.3s ease;
+}
+
+/* Style de focus pour les inputs - aligné avec vos couleurs */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(59, 139, 189, 0.25);
+}
+
+/* Ajouter ces règles à la fin du fichier existant */
+
+/* Style pour les placeholders en italique */
+::placeholder {
+  font-style: italic;
+  color: #adb5bd;
+  opacity: 0.7;
+}
+
+:-ms-input-placeholder {
+  font-style: italic;
+  color: #adb5bd;
+  opacity: 0.7;
+}
+
+::-ms-input-placeholder {
+  font-style: italic;
+  color: #adb5bd;
+  opacity: 0.7;
+}
+
+/* Styles pour le mode consultation */
+.view-mode .form-control {
+  background-color: var(--light-bg);
+  pointer-events: none;
+  border-color: transparent;
+}
+
+.view-mode .input-group-text {
+  background-color: var(--light-bg);
+  border-color: transparent;
+}
+
+.edit-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 10;
+}
+
+/* Effet de transition entre modes */
+.profile-card .card-body {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Badge pour indiquer les champs requis */
+.required-badge {
+  font-size: 0.7rem;
+  padding: 0.2rem 0.5rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+/* Style pour les champs vides en mode consultation */
+.view-mode .empty-field {
+  font-style: italic;
+  color: #adb5bd;
+}

@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../_services/storage.service';
 import { UserService } from '../_services/user.service';
 import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
+import { AuthService } from '../_services/auth.service';
+import { RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 // Interface commune pour les propriétés de base
 interface User {
@@ -46,11 +50,11 @@ interface Dentist extends User {
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterModule], // Ajoutez RouterModule ici
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   currentUser: User = {};
   showPasswordFields: boolean = false;
   password: string = '';
@@ -60,13 +64,52 @@ export class ProfileComponent implements OnInit {
   isPatient: boolean = false;
   isDentist: boolean = false;
 
+  public isEditMode = false;
+  private originalUserData: any = null; // Pour stocker les données originales en cas d'annulation
+
+  isLoggedIn = false;
+  private authSubscription: Subscription | null = null;
+
   constructor(
     private storageService: StorageService,
     private userService: UserService,
-    private http: HttpClient
+    private http: HttpClient,
+    private authService: AuthService, // Ajoutez cette ligne
+    private router: Router // Ajoutez cette ligne
   ) {}
 
   ngOnInit(): void {
+    // S'abonner à l'état d'authentification
+    this.authSubscription = this.storageService.authStatus$.subscribe(
+      (isLoggedIn) => {
+        console.log("État d'authentification changé:", isLoggedIn);
+        this.isLoggedIn = isLoggedIn;
+
+        if (!isLoggedIn) {
+          // Si déconnecté, rediriger immédiatement et nettoyer currentUser
+          this.currentUser = {}; // Initialize with empty object instead of null
+          this.isPatient = false;
+          this.isDentist = false;
+          this.router.navigate(['/home']); // ou vers une autre page publique
+        } else {
+          // Si connecté, charger les données
+          this.loadUserData();
+        }
+      }
+    );
+
+    // Vérifier l'état initial
+    this.isLoggedIn = this.storageService.isLoggedIn();
+    if (this.isLoggedIn) {
+      this.loadUserData();
+    } else {
+      // Si non connecté dès le départ, rediriger
+      this.router.navigate(['/home']);
+    }
+    this.isEditMode = false;
+  }
+
+  loadUserData(): void {
     this.currentUser = this.storageService.getUser();
     console.log('Current user from storage:', this.currentUser);
 
@@ -174,8 +217,8 @@ export class ProfileComponent implements OnInit {
           // Si besoin, extraire d'autres données importantes
           console.log('Profil utilisateur mis à jour:', this.currentUser);
 
-          // Sauvegarder l'utilisateur avec toutes ses données dans le storage
-          this.storageService.saveUser(this.currentUser);
+          // MODIFICATION ICI: Ne pas sauvegarder l'utilisateur automatiquement
+          // this.storageService.saveUser(this.currentUser); <-- Commentez ou supprimez cette ligne
         },
         error: (err) => {
           console.error('Erreur HTTP directe:', err);
@@ -192,7 +235,28 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  toggleEditMode(): void {
+    if (this.isEditMode) {
+      // Si on annule l'édition, on restaure les données originales
+      if (confirm('Êtes-vous sûr de vouloir annuler les modifications ?')) {
+        if (this.originalUserData) {
+          this.currentUser = JSON.parse(JSON.stringify(this.originalUserData));
+        }
+        this.isEditMode = false;
+        this.showPasswordFields = false;
+      }
+    } else {
+      // On passe en mode édition, on sauvegarde d'abord les données originales
+      this.originalUserData = JSON.parse(JSON.stringify(this.currentUser));
+      this.isEditMode = true;
+    }
+  }
+
   updateProfile(): void {
+    if (!this.isEditMode) {
+      return; // Ne rien faire si pas en mode édition
+    }
+
     if (!this.currentUser) {
       return;
     }
@@ -244,11 +308,36 @@ export class ProfileComponent implements OnInit {
         });
 
         alert('Profil mis à jour avec succès');
+        this.isEditMode = false; // Retour en mode consultation
+        this.originalUserData = null; // Effacer les données originales
+        this.showPasswordFields = false;
       },
       error: (err) => {
         console.error('Erreur de mise à jour:', err);
         alert('Erreur lors de la mise à jour du profil');
       },
     });
+  }
+
+  // Remplacez uniquement la méthode logout
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        // La méthode signOut() dans StorageService est appelée directement dans AuthService.logout()
+        // Les observables mettront à jour la navbar.
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error('Logout error:', err);
+      },
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.authSubscription) {
+      this.authSubscription.unsubscribe();
+      this.authSubscription = null;
+    }
   }
 }

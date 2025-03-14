@@ -1,71 +1,146 @@
-<div class="container" *ngIf="currentUser; else notLogged">
-  <header class="jumbotron">
-    <h3>
-      <strong>{{ currentUser.firstName }} {{ currentUser.name }}</strong> -
-      Profil
-    </h3>
-  </header>
+<!-- Ajoutez un titre et le bouton de basculement du mode -->
+<div class="container my-5" *ngIf="isLoggedIn; else notLogged">
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h2 class="profile-title">
+        <i class="bi bi-person-circle me-2"></i>
+        {{ currentUser.firstName || "Utilisateur" }}
+        {{ currentUser.name || "" }}
+      </h2>
+      <p class="text-muted">
+        {{
+          isEditMode ? "Édition de votre profil" : "Informations personnelles"
+        }}
+      </p>
+    </div>
+    <div class="col-md-4 text-end">
+      <button class="btn profile-btn-outline" (click)="toggleEditMode()">
+        <i class="bi" [ngClass]="isEditMode ? 'bi-x-lg' : 'bi-pencil-fill'"></i>
+        {{ isEditMode ? "Annuler les modifications" : "Modifier le profil" }}
+      </button>
+    </div>
+  </div>
 
-  <form #profileForm="ngForm" (ngSubmit)="updateProfile()">
+  <form
+    #profileForm="ngForm"
+    (ngSubmit)="updateProfile()"
+    [ngClass]="{ 'view-mode': !isEditMode }"
+  >
     <!-- Informations de base - communes à tous les utilisateurs -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h4>Informations personnelles</h4>
+    <div class="card mb-4 shadow-sm border-0 profile-card">
+      <div class="card-header profile-header">
+        <h4 class="m-0">
+          <i class="bi bi-person"></i> Informations personnelles
+        </h4>
       </div>
-      <div class="card-body">
+      <div class="card-body bg-white">
+        <!-- Ajouter un bouton édition à chaque carte si nécessaire -->
+        <button
+          *ngIf="!isEditMode"
+          type="button"
+          class="btn btn-sm btn-light edit-btn"
+          (click)="toggleEditMode()"
+        >
+          <i class="bi bi-pencil"></i>
+        </button>
+
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="firstName" class="form-label">Prénom :</label>
-            <input
-              type="text"
-              class="form-control"
-              id="firstName"
-              name="firstName"
-              [(ngModel)]="currentUser.firstName"
-            />
+            <label for="firstName" class="form-label profile-label">
+              Prénom
+            </label>
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-person-fill"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control profile-input"
+                id="firstName"
+                name="firstName"
+                [(ngModel)]="currentUser.firstName"
+                placeholder="Votre prénom"
+                [readonly]="!isEditMode"
+                [ngClass]="{
+                  'empty-field': !currentUser.firstName && !isEditMode
+                }"
+              />
+            </div>
           </div>
 
+          <!-- Répéter le même modèle pour les autres champs... -->
+          <!-- Exemple pour un champ : -->
           <div class="col-md-6 mb-3">
-            <label for="name" class="form-label">Nom :</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              [(ngModel)]="currentUser.name"
-            />
+            <label for="name" class="form-label profile-label">Nom</label>
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-person-badge"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control profile-input"
+                id="name"
+                name="name"
+                [(ngModel)]="currentUser.name"
+                placeholder="Votre nom"
+                [readonly]="!isEditMode"
+                [ngClass]="{ 'empty-field': !currentUser.name && !isEditMode }"
+              />
+            </div>
           </div>
         </div>
 
         <div class="mb-3">
-          <label for="email" class="form-label">Email :</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            [(ngModel)]="currentUser.email"
-          />
+          <label for="email" class="form-label profile-label"
+            >Email<span
+              class="badge bg-light text-secondary required-badge"
+              *ngIf="isEditMode"
+              >Requis</span
+            ></label
+          >
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-envelope-fill"></i
+            ></span>
+            <input
+              type="email"
+              class="form-control profile-input"
+              id="email"
+              name="email"
+              [(ngModel)]="currentUser.email"
+              placeholder="votre@email.com"
+            />
+          </div>
         </div>
 
         <!-- Champ spécifique au patient -->
         <div class="mb-3" *ngIf="isPatient">
-          <label for="age" class="form-label">Âge :</label>
-          <input
-            type="number"
-            class="form-control"
-            id="age"
-            name="age"
-            [(ngModel)]="currentUser['age']"
-          />
+          <label for="age" class="form-label profile-label">Âge</label>
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-calendar3"></i
+            ></span>
+            <input
+              type="number"
+              class="form-control profile-input"
+              id="age"
+              name="age"
+              [(ngModel)]="currentUser['age']"
+              placeholder="Votre âge"
+            />
+          </div>
         </div>
 
-        <div class="mb-3">
+        <div class="mt-4">
           <button
             type="button"
-            class="btn btn-outline-primary"
+            class="btn profile-btn-outline"
             (click)="togglePasswordFields()"
           >
+            <i
+              class="bi"
+              [ngClass]="showPasswordFields ? 'bi-lock-fill' : 'bi-unlock-fill'"
+            ></i>
             {{
               showPasswordFields
                 ? "Annuler le changement de mot de passe"
@@ -74,195 +149,320 @@
           </button>
         </div>
 
-        <div *ngIf="showPasswordFields" class="row">
+        <div
+          *ngIf="showPasswordFields"
+          class="row mt-3 pt-3 border-top border-light"
+        >
           <div class="col-md-6 mb-3">
-            <label for="password" class="form-label"
-              >Nouveau mot de passe :</label
-            >
-            <input
-              type="password"
-              class="form-control"
-              id="password"
-              name="password"
-              [(ngModel)]="password"
-            />
+            <label for="password" class="form-label profile-label">
+              Nouveau mot de passe
+            </label>
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-key-fill"></i
+              ></span>
+              <input
+                type="password"
+                class="form-control profile-input"
+                id="password"
+                name="password"
+                [(ngModel)]="password"
+                placeholder="Nouveau mot de passe"
+              />
+            </div>
           </div>
 
           <div class="col-md-6 mb-3">
-            <label for="confirmPassword" class="form-label"
-              >Confirmez le mot de passe :</label
-            >
-            <input
-              type="password"
-              class="form-control"
-              id="confirmPassword"
-              name="confirmPassword"
-              [(ngModel)]="confirmPassword"
-            />
+            <label for="confirmPassword" class="form-label profile-label">
+              Confirmez le mot de passe
+            </label>
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-check-circle-fill"></i
+              ></span>
+              <input
+                type="password"
+                class="form-control profile-input"
+                id="confirmPassword"
+                name="confirmPassword"
+                [(ngModel)]="confirmPassword"
+                placeholder="Confirmer le mot de passe"
+              />
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Informations spécifiques aux patients -->
-    <div class="card mb-4" *ngIf="isPatient">
-      <div class="card-header">
-        <h4>Informations de santé</h4>
+    <div class="card mb-4 shadow-sm border-0 profile-card" *ngIf="isPatient">
+      <div class="card-header profile-header-secondary">
+        <h4 class="m-0">
+          <i class="bi bi-clipboard2-pulse"></i> Informations de santé
+        </h4>
       </div>
-      <div class="card-body">
-        <div class="mb-3">
-          <label for="socialSecurityNumber" class="form-label"
-            >Numéro de sécurité sociale :</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="socialSecurityNumber"
-            name="socialSecurityNumber"
-            [(ngModel)]="currentUser['socialSecurityNumber']"
-          />
+      <div class="card-body bg-white">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="socialSecurityNumber" class="form-label profile-label">
+              Numéro de sécurité sociale
+            </label>
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-shield-fill-check"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control profile-input"
+                id="socialSecurityNumber"
+                name="socialSecurityNumber"
+                [(ngModel)]="currentUser['socialSecurityNumber']"
+                placeholder="Votre numéro de sécurité sociale"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label
+              for="mutualMembershipNumber"
+              class="form-label profile-label"
+            >
+              Numéro de mutuelle
+            </label>
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-credit-card-2-front"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control profile-input"
+                id="mutualMembershipNumber"
+                name="mutualMembershipNumber"
+                [(ngModel)]="currentUser['mutualMembershipNumber']"
+                placeholder="Votre numéro de mutuelle"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="mutualMembershipNumber" class="form-label"
-            >Numéro de mutuelle :</label
+          <label for="allergies" class="form-label profile-label"
+            >Allergies</label
           >
-          <input
-            type="text"
-            class="form-control"
-            id="mutualMembershipNumber"
-            name="mutualMembershipNumber"
-            [(ngModel)]="currentUser['mutualMembershipNumber']"
-          />
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-exclamation-triangle"></i
+            ></span>
+            <textarea
+              class="form-control profile-input"
+              id="allergies"
+              name="allergies"
+              [(ngModel)]="currentUser['allergies']"
+              placeholder="Vos allergies"
+              rows="2"
+            ></textarea>
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="allergies" class="form-label">Allergies :</label>
-          <textarea
-            class="form-control"
-            id="allergies"
-            name="allergies"
-            [(ngModel)]="currentUser['allergies']"
-          ></textarea>
+          <label for="currentMedications" class="form-label profile-label">
+            Médicaments actuels
+          </label>
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-capsule"></i
+            ></span>
+            <textarea
+              class="form-control profile-input"
+              id="currentMedications"
+              name="currentMedications"
+              [(ngModel)]="currentUser['currentMedications']"
+              placeholder="Vos médicaments actuels"
+              rows="2"
+            ></textarea>
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="currentMedications" class="form-label"
-            >Médicaments actuels :</label
-          >
-          <textarea
-            class="form-control"
-            id="currentMedications"
-            name="currentMedications"
-            [(ngModel)]="currentUser['currentMedications']"
-          ></textarea>
+          <label for="chronicIllnesses" class="form-label profile-label">
+            Maladies chroniques
+          </label>
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-heart-pulse"></i
+            ></span>
+            <textarea
+              class="form-control profile-input"
+              id="chronicIllnesses"
+              name="chronicIllnesses"
+              [(ngModel)]="currentUser['chronicIllnesses']"
+              placeholder="Vos maladies chroniques"
+              rows="2"
+            ></textarea>
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="chronicIllnesses" class="form-label"
-            >Maladies chroniques :</label
-          >
-          <textarea
-            class="form-control"
-            id="chronicIllnesses"
-            name="chronicIllnesses"
-            [(ngModel)]="currentUser['chronicIllnesses']"
-          ></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label for="healthIssues" class="form-label"
-            >Problèmes de santé :</label
-          >
-          <textarea
-            class="form-control"
-            id="healthIssues"
-            name="healthIssues"
-            [(ngModel)]="currentUser['healthIssues']"
-          ></textarea>
+          <label for="healthIssues" class="form-label profile-label">
+            Problèmes de santé
+          </label>
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-clipboard2-data"></i
+            ></span>
+            <textarea
+              class="form-control profile-input"
+              id="healthIssues"
+              name="healthIssues"
+              [(ngModel)]="currentUser['healthIssues']"
+              placeholder="Vos problèmes de santé"
+              rows="2"
+            ></textarea>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- Informations spécifiques aux dentistes -->
-    <div class="card mb-4" *ngIf="isDentist">
-      <div class="card-header">
-        <h4>Informations professionnelles</h4>
+    <div class="card mb-4 shadow-sm border-0 profile-card" *ngIf="isDentist">
+      <div class="card-header profile-header-tertiary">
+        <h4 class="m-0">
+          <i class="bi bi-briefcase-fill"></i> Informations professionnelles
+        </h4>
       </div>
-      <div class="card-body">
-        <div class="mb-3">
-          <label for="phone" class="form-label">Téléphone :</label>
-          <input
-            type="text"
-            class="form-control"
-            id="phone"
-            name="phone"
-            [(ngModel)]="currentUser['phone']"
-          />
+      <div class="card-body bg-white">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="phone" class="form-label profile-label"
+              >Téléphone</label
+            >
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-telephone-fill"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control profile-input"
+                id="phone"
+                name="phone"
+                [(ngModel)]="currentUser['phone']"
+                placeholder="Votre numéro de téléphone"
+              />
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="licenseNumber" class="form-label profile-label">
+              Numéro de licence
+            </label>
+            <div class="input-group">
+              <span class="input-group-text profile-input-icon"
+                ><i class="bi bi-award"></i
+              ></span>
+              <input
+                type="text"
+                class="form-control profile-input"
+                id="licenseNumber"
+                name="licenseNumber"
+                [(ngModel)]="currentUser['licenseNumber']"
+                placeholder="Votre numéro de licence"
+              />
+            </div>
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="address" class="form-label">Adresse :</label>
-          <input
-            type="text"
-            class="form-control"
-            id="address"
-            name="address"
-            [(ngModel)]="currentUser['address']"
-          />
+          <label for="address" class="form-label profile-label">Adresse</label>
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-geo-alt-fill"></i
+            ></span>
+            <input
+              type="text"
+              class="form-control profile-input"
+              id="address"
+              name="address"
+              [(ngModel)]="currentUser['address']"
+              placeholder="Votre adresse professionnelle"
+            />
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="licenseNumber" class="form-label"
-            >Numéro de licence :</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="licenseNumber"
-            name="licenseNumber"
-            [(ngModel)]="currentUser['licenseNumber']"
-          />
+          <label for="specialization" class="form-label profile-label">
+            Spécialisation
+          </label>
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-bookmark-star"></i
+            ></span>
+            <input
+              type="text"
+              class="form-control profile-input"
+              id="specialization"
+              name="specialization"
+              [(ngModel)]="currentUser['specialization']"
+              placeholder="Votre spécialisation"
+            />
+          </div>
         </div>
 
         <div class="mb-3">
-          <label for="specialization" class="form-label"
-            >Spécialisation :</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="specialization"
-            name="specialization"
-            [(ngModel)]="currentUser['specialization']"
-          />
-        </div>
-
-        <div class="mb-3">
-          <label for="clinicName" class="form-label"
-            >Nom de la clinique :</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            id="clinicName"
-            name="clinicName"
-            [(ngModel)]="currentUser['clinicName']"
-          />
+          <label for="clinicName" class="form-label profile-label">
+            Nom de la clinique
+          </label>
+          <div class="input-group">
+            <span class="input-group-text profile-input-icon"
+              ><i class="bi bi-hospital"></i
+            ></span>
+            <input
+              type="text"
+              class="form-control profile-input"
+              id="clinicName"
+              name="clinicName"
+              [(ngModel)]="currentUser['clinicName']"
+              placeholder="Nom de votre clinique"
+            />
+          </div>
         </div>
       </div>
     </div>
 
-    <button type="submit" class="btn btn-primary">
-      Mettre à jour le profil
-    </button>
+    <!-- Boutons de soumission uniquement en mode édition -->
+    <div class="d-flex justify-content-end mt-4 mb-5" *ngIf="isEditMode">
+      <button
+        type="button"
+        class="btn btn-outline-secondary me-2"
+        (click)="toggleEditMode()"
+      >
+        <i class="bi bi-x-circle me-1"></i> Annuler
+      </button>
+      <button type="submit" class="btn profile-btn-primary px-4 py-2">
+        <i class="bi bi-save me-2"></i> Enregistrer les modifications
+      </button>
+    </div>
   </form>
 </div>
 
 <ng-template #notLogged>
-  <div class="container">
-    <div class="alert alert-warning">
-      <p>Veuillez vous connecter pour accéder à votre profil.</p>
+  <div class="container my-5">
+    <div class="alert profile-alert shadow-sm">
+      <h4 class="alert-heading">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> Accès restreint
+      </h4>
+      <p>Vous devez être connecté pour accéder à votre profil.</p>
+      <hr class="profile-divider" />
+      <div class="mt-3 d-flex gap-3">
+        <a routerLink="/login" class="btn profile-btn-primary">
+          <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
+        </a>
+        <a routerLink="/register" class="btn profile-btn-outline">
+          <i class="bi bi-person-plus me-2"></i> Créer un compte
+        </a>
+        <a routerLink="/home" class="btn btn-light">
+          <i class="bi bi-house-door me-2"></i> Retour à l'accueil
+        </a>
+      </div>
     </div>
   </div>
 </ng-template>

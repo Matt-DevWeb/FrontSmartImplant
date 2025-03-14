@@ -1,0 +1,680 @@
+/* Hero Section Styles */
+.hero-section {
+  position: relative;
+  background-color: #f8f9fa;
+  overflow: hidden;
+  padding: 80px 0;
+}
+
+.bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23bbbbbb' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.min-vh-75 {
+  min-height: 75vh;
+}
+
+.text-gradient {
+  background: linear-gradient(
+    90deg,
+    var(--secondary-color) 0%,
+    var(--accent-color) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-image {
+  position: relative;
+  z-index: 2;
+  transform: perspective(1000px) rotateY(-5deg);
+  transition: all 0.5s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.hero-image:hover {
+  transform: perspective(1000px) rotateY(0deg);
+}
+
+.float-element {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.float-1 {
+  width: 150px;
+  height: 150px;
+  background: rgba(59, 139, 189, 0.1);
+  top: -30px;
+  left: -30px;
+  animation: float 8s infinite ease-in-out;
+}
+
+.float-2 {
+  width: 100px;
+  height: 100px;
+  background: rgba(74, 106, 155, 0.1);
+  bottom: 30px;
+  right: 10px;
+  animation: float 6s infinite ease-in-out 2s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* Feature Cards */
+.feature-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+}
+
+/* Testimonial Cards */
+.testimonial-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.testimonial-avatar {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* CTA Section */
+.bg-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+}
+
+/* Accordion Styling */
+.accordion-item {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.accordion-button {
+  font-weight: 500;
+  padding: 1.2rem;
+}
+
+.accordion-button:not(.collapsed) {
+  color: var(--secondary-color);
+  background-color: rgba(6, 126, 166, 0.05);
+}
+
+.accordion-button:focus {
+  box-shadow: 0 0 0 0.25rem rgba(6, 126, 166, 0.1);
+}
+
+/* Animation classes - requires Animate.css library */
+.animate__animated {
+  --animate-duration: 0.8s;
+}
+
+/* Responsive adjustments */ /* filepath: c:\Workspace\Isika - VSC\Projet 3\SmartImplant\Front\src\app\home\home.component.css */
+/* Hero Section Styles */
+.hero-section {
+  position: relative;
+  background-color: #f8f9fa;
+  overflow: hidden;
+  padding: 80px 0;
+}
+
+.bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23bbbbbb' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  z-index: 0;
+}
+
+.min-vh-75 {
+  min-height: 75vh;
+}
+
+.text-gradient {
+  background: linear-gradient(
+    90deg,
+    var(--secondary-color) 0%,
+    var(--accent-color) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-image {
+  position: relative;
+  z-index: 2;
+  transform: perspective(1000px) rotateY(-5deg);
+  transition: all 0.5s ease;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.hero-image:hover {
+  transform: perspective(1000px) rotateY(0deg);
+}
+
+.float-element {
+  position: absolute;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.float-1 {
+  width: 150px;
+  height: 150px;
+  background: rgba(59, 139, 189, 0.1);
+  top: -30px;
+  left: -30px;
+  animation: float 8s infinite ease-in-out;
+}
+
+.float-2 {
+  width: 100px;
+  height: 100px;
+  background: rgba(74, 106, 155, 0.1);
+  bottom: 30px;
+  right: 10px;
+  animation: float 6s infinite ease-in-out 2s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0);
+  }
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+  }
+}
+
+/* Feature Cards */
+.feature-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1);
+}
+
+/* Testimonial Cards */
+.testimonial-card {
+  transition: all 0.3s ease;
+  border-radius: 12px;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.testimonial-avatar {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+/* CTA Section */
+.bg-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+}
+
+/* Accordion Styling */
+.accordion-item {
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.accordion-button {
+  font-weight: 500;
+  padding: 1.2rem;
+}
+
+.accordion-button:not(.collapsed) {
+  color: var(--secondary-color);
+  background-color: rgba(6, 126, 166, 0.05);
+}
+
+.accordion-button:focus {
+  box-shadow: 0 0 0 0.25rem rgba(6, 126, 166, 0.1);
+}
+
+/* Animation classes - requires Animate.css library */
+.animate__animated {
+  --animate-duration: 0.8s;
+}
+
+/* Responsive adjustments */
+
+/* Ajoutez ces styles à votre fichier existant */
+
+/* Effets de parallaxe */
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Effet glassmorphism (style moderne) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Boutons stylisés */
+.btn-custom {
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-custom:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+  z-index: -1;
+}
+
+.btn-custom:hover:before {
+  left: 100%;
+}
+
+.btn-primary-custom {
+  background: linear-gradient(
+    45deg,
+    var(--secondary-color) 0%,
+    var(--primary-color) 100%
+  );
+  border: none;
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 139, 189, 0.4);
+}
+
+.btn-secondary-custom {
+  background: white;
+  color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
+}
+
+.btn-secondary-custom:hover {
+  background: var(--secondary-color);
+  color: white;
+}
+
+/* Section de statistiques */
+.stats-counter {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  background: linear-gradient(
+    90deg,
+    var(--secondary-color),
+    var(--accent-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stats-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #eaeaea;
+}
+
+.stats-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border-color: var(--primary-color);
+}
+
+/* Effets d'image créatifs */
+.clip-path-image {
+  clip-path: polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%);
+  transition: all 0.5s ease;
+}
+
+.clip-path-image:hover {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+
+.rounded-image-container {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  overflow: hidden;
+  transition: all 1s ease;
+}
+
+.rounded-image-container:hover {
+  border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+}
+
+/* Timeline ou processus */
+.timeline-container {
+  position: relative;
+  padding: 20px 0;
+}
+
+.timeline-container::before {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(
+    180deg,
+    var(--primary-color) 0%,
+    var(--secondary-color) 100%
+  );
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 45px;
+  z-index: 1;
+}
+
+.timeline-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 4px solid var(--primary-color);
+  box-shadow: 0 0 0 5px rgba(59, 139, 189, 0.2);
+}
+
+/* Carrousel personnalisé */
+.custom-carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.carousel-indicator-custom {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: all 0.3s ease;
+}
+
+.carousel-indicator-custom.active {
+  width: 20px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+/* Effets au scroll avec animations */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Section avantages avec icônes animées */
+.benefit-icon {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(59, 139, 189, 0.1);
+  color: var(--secondary-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+  background-color: var(--secondary-color);
+  color: white;
+  transform: rotateY(360deg);
+  transition: all 0.5s ease;
+}
+
+/* Section newsletter moderne */
+.newsletter-section {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.newsletter-input {
+  height: 60px;
+  border-radius: 30px;
+  padding-left: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.newsletter-button {
+  height: 50px;
+  border-radius: 25px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  padding: 0 25px;
+  background: linear-gradient(
+    45deg,
+    var(--secondary-color) 0%,
+    var(--primary-color) 100%
+  );
+  border: none;
+  color: white;
+  font-weight: 600;
+}
+
+/* Responsive design enhancements */
+@media (max-width: 992px) {
+  .timeline-container::before {
+    left: 30px;
+  }
+
+  .stats-counter {
+    font-size: 2rem;
+  }
+
+  .feature-card {
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 50px 0;
+  }
+
+  .min-vh-75 {
+    min-height: auto;
+  }
+
+  .clip-path-image {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+
+  .float-element {
+    display: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-card,
+  .feature-card,
+  .testimonial-card {
+    padding: 15px;
+  }
+
+  .newsletter-input {
+    height: 50px;
+    margin-bottom: 15px;
+  }
+
+  .newsletter-button {
+    position: static;
+    width: 100%;
+    margin-top: 10px;
+  }
+}
+
+/* Effet de défilement doux */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animations pour les sections */
+.reveal {
+  position: relative;
+  opacity: 0;
+}
+
+.reveal.active {
+  opacity: 1;
+}
+
+.active.fade-bottom {
+  animation: fade-bottom 0.5s ease-in;
+}
+
+.active.fade-left {
+  animation: fade-left 0.5s ease-in;
+}
+
+.active.fade-right {
+  animation: fade-right 0.5s ease-in;
+}
+
+@keyframes fade-bottom {
+  0% {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-left {
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-right {
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
