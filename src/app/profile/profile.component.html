@@ -7,7 +7,7 @@
   </header>
 
   <form #profileForm="ngForm" (ngSubmit)="updateProfile()">
-    <!-- Informations de base -->
+    <!-- Informations de base - communes à tous les utilisateurs -->
     <div class="card mb-4">
       <div class="card-header">
         <h4>Informations personnelles</h4>
@@ -15,24 +15,24 @@
       <div class="card-body">
         <div class="row">
           <div class="col-md-6 mb-3">
-            <label for="name" class="form-label">Nom :</label>
+            <label for="firstName" class="form-label">Prénom :</label>
             <input
               type="text"
-              id="name"
               class="form-control"
-              [(ngModel)]="currentUser.name"
-              name="name"
+              id="firstName"
+              name="firstName"
+              [(ngModel)]="currentUser.firstName"
             />
           </div>
 
           <div class="col-md-6 mb-3">
-            <label for="firstName" class="form-label">Prénom :</label>
+            <label for="name" class="form-label">Nom :</label>
             <input
               type="text"
-              id="firstName"
               class="form-control"
-              [(ngModel)]="currentUser.firstName"
-              name="firstName"
+              id="name"
+              name="name"
+              [(ngModel)]="currentUser.name"
             />
           </div>
         </div>
@@ -41,34 +41,35 @@
           <label for="email" class="form-label">Email :</label>
           <input
             type="email"
-            id="email"
             class="form-control"
-            [(ngModel)]="currentUser.email"
+            id="email"
             name="email"
+            [(ngModel)]="currentUser.email"
           />
         </div>
 
-        <div class="mb-3">
+        <!-- Champ spécifique au patient -->
+        <div class="mb-3" *ngIf="isPatient">
           <label for="age" class="form-label">Âge :</label>
           <input
             type="number"
-            id="age"
             class="form-control"
-            [(ngModel)]="currentUser.age"
+            id="age"
             name="age"
+            [(ngModel)]="currentUser['age']"
           />
         </div>
 
         <div class="mb-3">
           <button
             type="button"
-            class="btn btn-outline-secondary"
+            class="btn btn-outline-primary"
             (click)="togglePasswordFields()"
           >
             {{
               showPasswordFields
                 ? "Annuler le changement de mot de passe"
-                : "Modifier le mot de passe"
+                : "Changer le mot de passe"
             }}
           </button>
         </div>
@@ -80,31 +81,31 @@
             >
             <input
               type="password"
-              id="password"
               class="form-control"
-              [(ngModel)]="password"
+              id="password"
               name="password"
+              [(ngModel)]="password"
             />
           </div>
 
           <div class="col-md-6 mb-3">
             <label for="confirmPassword" class="form-label"
-              >Confirmer le mot de passe :</label
+              >Confirmez le mot de passe :</label
             >
             <input
               type="password"
-              id="confirmPassword"
               class="form-control"
-              [(ngModel)]="confirmPassword"
+              id="confirmPassword"
               name="confirmPassword"
+              [(ngModel)]="confirmPassword"
             />
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Informations de santé -->
-    <div class="card mb-4">
+    <!-- Informations spécifiques aux patients -->
+    <div class="card mb-4" *ngIf="isPatient">
       <div class="card-header">
         <h4>Informations de santé</h4>
       </div>
@@ -115,10 +116,10 @@
           >
           <input
             type="text"
-            id="socialSecurityNumber"
             class="form-control"
-            [(ngModel)]="currentUser.socialSecurityNumber"
+            id="socialSecurityNumber"
             name="socialSecurityNumber"
+            [(ngModel)]="currentUser['socialSecurityNumber']"
           />
         </div>
 
@@ -128,34 +129,20 @@
           >
           <input
             type="text"
+            class="form-control"
             id="mutualMembershipNumber"
-            class="form-control"
-            [(ngModel)]="currentUser.mutualMembershipNumber"
             name="mutualMembershipNumber"
+            [(ngModel)]="currentUser['mutualMembershipNumber']"
           />
-        </div>
-
-        <div class="mb-3">
-          <label for="healthIssues" class="form-label"
-            >Problèmes de santé :</label
-          >
-          <textarea
-            id="healthIssues"
-            class="form-control"
-            rows="3"
-            [(ngModel)]="currentUser.healthIssues"
-            name="healthIssues"
-          ></textarea>
         </div>
 
         <div class="mb-3">
           <label for="allergies" class="form-label">Allergies :</label>
           <textarea
-            id="allergies"
             class="form-control"
-            rows="2"
-            [(ngModel)]="currentUser.allergies"
+            id="allergies"
             name="allergies"
+            [(ngModel)]="currentUser['allergies']"
           ></textarea>
         </div>
 
@@ -164,11 +151,10 @@
             >Médicaments actuels :</label
           >
           <textarea
-            id="currentMedications"
             class="form-control"
-            rows="2"
-            [(ngModel)]="currentUser.currentMedications"
+            id="currentMedications"
             name="currentMedications"
+            [(ngModel)]="currentUser['currentMedications']"
           ></textarea>
         </div>
 
@@ -177,12 +163,92 @@
             >Maladies chroniques :</label
           >
           <textarea
-            id="chronicIllnesses"
             class="form-control"
-            rows="2"
-            [(ngModel)]="currentUser.chronicIllnesses"
+            id="chronicIllnesses"
             name="chronicIllnesses"
+            [(ngModel)]="currentUser['chronicIllnesses']"
           ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="healthIssues" class="form-label"
+            >Problèmes de santé :</label
+          >
+          <textarea
+            class="form-control"
+            id="healthIssues"
+            name="healthIssues"
+            [(ngModel)]="currentUser['healthIssues']"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Informations spécifiques aux dentistes -->
+    <div class="card mb-4" *ngIf="isDentist">
+      <div class="card-header">
+        <h4>Informations professionnelles</h4>
+      </div>
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="phone" class="form-label">Téléphone :</label>
+          <input
+            type="text"
+            class="form-control"
+            id="phone"
+            name="phone"
+            [(ngModel)]="currentUser['phone']"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="address" class="form-label">Adresse :</label>
+          <input
+            type="text"
+            class="form-control"
+            id="address"
+            name="address"
+            [(ngModel)]="currentUser['address']"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="licenseNumber" class="form-label"
+            >Numéro de licence :</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="licenseNumber"
+            name="licenseNumber"
+            [(ngModel)]="currentUser['licenseNumber']"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="specialization" class="form-label"
+            >Spécialisation :</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="specialization"
+            name="specialization"
+            [(ngModel)]="currentUser['specialization']"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="clinicName" class="form-label"
+            >Nom de la clinique :</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="clinicName"
+            name="clinicName"
+            [(ngModel)]="currentUser['clinicName']"
+          />
         </div>
       </div>
     </div>
